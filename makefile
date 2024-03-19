@@ -1,39 +1,23 @@
-CFLAGS=-std=c17 -pedantic -Wvla -Werror -Wall -D_DEFAULT_SOURCE
+CFLAGS=-std=c11 -pedantic -Wall -Wvla -Werror -D_DEFAULT_SOURCE
 
-all : encrypt decrypt encryptPolybe decryptPolybe
+all: ex4.1a ex4.1b
 
-crypt.o : crypt.c crypt.h
-	cc $(CFLAGS) -c crypt.c;
+ex4.1a.o: ex4.1a.c utils_v1.h
+	gcc $(CFLAGS) -c ex4.1a.c
 
-encrypt.o : crypt.h utils_v1.h encrypt.c
-	cc $(CFLAGS) -c encrypt.c
+ex4.1a: ex4.1a.o utils_v1.o
+	gcc $(CFLAGS) -o ex4.1a ex4.1a.o utils_v1.o
 
-decrypt.o : crypt.h utils_v1.h decrypt.c
-	cc $(CFLAGS) -c decrypt.c
+ex4.1b.o: ex4.1b.c utils_v1.h
+	gcc $(CFLAGS) -c ex4.1b.c
 
-utils_v1.o : utils_v1.h utils_v1.c
-	cc $(CFLAGS) -c utils_v1.c
+ex4.1b: ex4.1b.o utils_v1.o
+	gcc $(CFLAGS) -o ex4.1b ex4.1b.o utils_v1.o
 
-encrypt : crypt.o encrypt.o utils_v1.o
-	cc $(CFLAGS) -o encrypt crypt.o encrypt.o utils_v1.o
 
-decrypt : crypt.o decrypt.o utils_v1.o
-	cc $(CFLAGS) -o decrypt crypt.o decrypt.o utils_v1.o
+utils_v1.o: utils_v1.c utils_v1.h
+	gcc $(CFLAGS) -c utils_v1.c
 
-cryptPolybe.o : cryptPolybe.h cryptPolybe.c
-	cc $(CFLAGS) -c cryptPolybe.c
-
-encryptPolybe.o : cryptPolybe.h encryptPolybe.c utils_v1.h
-	cc $(CFLAGS) -c encryptPolybe.c
-
-decryptPolybe.o : cryptPolybe.h decryptPolybe.c utils_v1.h
-	cc $(CFLAGS) -c decryptPolybe.c
-
-encryptPolybe : utils_v1.o encryptPolybe.o cryptPolybe.o
-	cc $(CFLAGS) -o encryptPolybe cryptPolybe.o encryptPolybe.o utils_v1.o
-
-decryptPolybe : utils_v1.o decryptPolybe.o cryptPolybe.o
-	cc $(CFLAGS) -o decryptPolybe cryptPolybe.o decryptPolybe.o utils_v1.o
-
-clean : 
-	rm *.o encrypt decrypt encryptPolybe decryptPolybe
+clean:
+	rm -f *.o
+	rm -f $(all)
